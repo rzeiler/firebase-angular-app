@@ -1,0 +1,6 @@
+<div *ngIf="afAuth.user | async as user; else showLogin">
+  <a mat-list-item (click)="logout()" href="#logout">{{ user.displayName }} Logout</a>
+</div>
+<ng-template #showLogin>
+  <a mat-list-item (click)="login()">Login with Google</a>
+</ng-template>

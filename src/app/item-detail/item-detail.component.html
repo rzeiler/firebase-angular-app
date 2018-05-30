@@ -1,0 +1,6 @@
+<h1>Add</h1>
+<h1>{{ item | async | json }}</h1>
+<input type="text" #newname placeholder="Name" />
+<input type="text" #newsize placeholder="Size" />
+<br />
+<button (click)="addItem(newname.value,newsize.value)">Set New</button>
