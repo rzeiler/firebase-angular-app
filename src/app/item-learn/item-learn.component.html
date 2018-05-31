@@ -1,10 +1,9 @@
-<!--<ul>
+<ul>
   <li *ngFor="let item of items | async">
-    <input type="text" #updatesize [value]="item.size" />
-    <input type="text" #updatetext [value]="item.text" />
+    <a (click)="validateItem(item.text,item.key)">{{item.text}}</a>
   </li>
 </ul>
--->
 
 
-<h1>{{size | async}}</h1>
+
+<h1>{{item.size}}</h1>

@@ -8,6 +8,14 @@ import { AuthInfo } from "../auth-info";
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
 
+export class Item {
+  size: string;
+  text: string;
+  isRight: boolean = false;
+  timestamp: number;
+}
+
+
 @Component({
   selector: 'app-item-learn',
   templateUrl: './item-learn.component.html',
@@ -17,9 +25,14 @@ export class ItemLearnComponent implements OnInit {
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
-  size: string = "";
-
+  item = new Item();
+  private myitems: any[];
+  private step = 0;
   timestamp = Date.now();
+
+countries: Observable<Item[]>;
+
+  private myLIST: Observable<any[]>;
 
   constructor(public db: AngularFireDatabase, public userAuthService: UserAuthService) {
     userAuthService.authUser().subscribe((user: AuthInfo) => {
@@ -27,8 +40,9 @@ export class ItemLearnComponent implements OnInit {
         this.itemsRef = db.list(user.uid + '/items', ref => ref.orderByChild('timestamp').limitToLast(10));
         this.items = this.itemsRef.snapshotChanges().pipe(
           map(changes => {
-            let data = changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-            return data;
+            this.myitems = changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+            this.item = this.myitems[this.step];
+            return this.myitems;
           })
         );
       } else {
@@ -38,16 +52,25 @@ export class ItemLearnComponent implements OnInit {
     });
   }
 
+  validateItem(text: string, key: string) {
+    console.log(this.item.text, text, key);
+    if (this.item.text == text) {
+
+      this.step = (this.myitems.length > (this.step + 1)) ? 0 : this.step + 1;
 
 
-  updateListItem(key: string, newText: string, newSize: string) {
-    var timestamp = Date.now();
-    this.itemsRef.update(key, { text: newText, size: newSize, timestamp: timestamp }).then(() => alert("Update!"));
-  }
-  deleteItem(key: string) {
-    if (confirm("Wollen sie den datensatz wirklich löschen?")) {
-      this.itemsRef.remove(key);
+      console.log("myitems", this.myitems);
+      this.item = this.myitems[this.step];
+
+      this.updateLearnItem(key);
     }
+
+
+  }
+
+  updateLearnItem(key: string) {
+    var timestamp = Date.now();
+    this.itemsRef.update(key, { timestamp: timestamp });
   }
 
   ngOnDestroy() {
