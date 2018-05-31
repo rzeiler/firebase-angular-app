@@ -9,25 +9,27 @@ import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
 
 @Component({
-  selector: 'app-item-list',
-  templateUrl: './item-list.component.html',
-  styleUrls: ['./item-list.component.css']
+  selector: 'app-item-learn',
+  templateUrl: './item-learn.component.html',
+  styleUrls: ['./item-learn.component.css']
 })
-export class ItemListComponent implements OnInit {
+export class ItemLearnComponent implements OnInit {
 
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
+  size: string = "";
 
-
+  timestamp = Date.now();
 
   constructor(public db: AngularFireDatabase, public userAuthService: UserAuthService) {
     userAuthService.authUser().subscribe((user: AuthInfo) => {
       if (user) {
-        this.itemsRef = db.list(user.uid + '/items');
+        this.itemsRef = db.list(user.uid + '/items', ref => ref.orderByChild('timestamp').limitToLast(10));
         this.items = this.itemsRef.snapshotChanges().pipe(
-          map(changes =>
-            changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
-          )
+          map(changes => {
+            let data = changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+            return data;
+          })
         );
       } else {
         this.itemsRef = null;
@@ -35,6 +37,8 @@ export class ItemListComponent implements OnInit {
       }
     });
   }
+
+
 
   updateListItem(key: string, newText: string, newSize: string) {
     var timestamp = Date.now();

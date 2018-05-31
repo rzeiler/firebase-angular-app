@@ -11,9 +11,11 @@ import { FormsModule } from '@angular/forms';
 import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { UserAuthComponent } from './user-auth/user-auth.component';
 import { AppRoutingModule } from './/app-routing.module';
+import { ItemLearnComponent } from './item-learn/item-learn.component';
 
 const routes: Routes = [
-  { path: '', component: ItemListComponent },
+  { path: 'all', component: ItemListComponent },
+  { path: '', component: ItemLearnComponent },
   { path: 'list', component: ItemListComponent },
   { path: 'add', component: ItemDetailComponent },
   { path: 'login', component: UserAuthComponent }
@@ -24,7 +26,8 @@ const routes: Routes = [
     AppComponent,
     ItemListComponent,
     ItemDetailComponent,
-    UserAuthComponent
+    UserAuthComponent,
+    ItemLearnComponent
   ],
   imports: [
     BrowserModule,

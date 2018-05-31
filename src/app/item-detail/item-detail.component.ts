@@ -1,33 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase, AngularFireAction, AngularFireList } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+
+import { UserAuthService } from '../user-auth.service';
+import { AuthInfo } from "../auth-info";
 
 @Component({
   selector: 'app-item-detail',
   templateUrl: './item-detail.component.html',
-  styleUrls: ['./item-detail.component.css'],
-  providers: [AngularFireAuth]
+  styleUrls: ['./item-detail.component.css']
 })
 export class ItemDetailComponent implements OnInit {
 
-  private currentUser: firebase.User;
   itemsRef: AngularFireList<any>;
 
-
-  constructor(public db: AngularFireDatabase, public afAuth: AngularFireAuth) {
-
-    afAuth.authState.subscribe(user => {
+  constructor(public db: AngularFireDatabase, public userAuthService: UserAuthService) {
+    userAuthService.authUser().subscribe((user: AuthInfo) => {
       if (user) {
-        this.currentUser = user;
         this.itemsRef = db.list(user.uid + '/items');
       }
     });
-
   }
 
   addItem(size: string | null, text: string | null) {
-    this.itemsRef.push({ size: size, text: text });
+    var timestamp = Date.now();
+    this.itemsRef.push({ size: size, text: text, timestamp: timestamp });
   }
 
   ngOnInit() {

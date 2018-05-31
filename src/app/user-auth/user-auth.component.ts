@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { UserAuthService } from '../user-auth.service';
-import { Observable } from 'rxjs/Observable';
-import * as firebase from 'firebase/app';
+import { AuthInfo } from "../auth-info";
 
 @Component({
   selector: 'app-user-auth',
@@ -10,11 +9,10 @@ import * as firebase from 'firebase/app';
 })
 export class UserAuthComponent {
 
-  auth: Observable<firebase.User>;
+  auth: AuthInfo;
 
   constructor(public userAuthService: UserAuthService) {
-    userAuthService.authUser().subscribe((fireuser: firebase.User) => {
-      console.log("UserAuthComponent:", fireuser);
+    userAuthService.authUser().subscribe((fireuser: AuthInfo) => {
       this.auth = fireuser;
     });
   }
