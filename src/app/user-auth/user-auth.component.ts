@@ -1,35 +1,32 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { Component } from '@angular/core';
+import { UserAuthService } from '../user-auth.service';
+import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-user-auth',
   templateUrl: './user-auth.component.html',
-  styleUrls: ['./user-auth.component.css'],
-  providers: [AngularFireAuth]
+  styleUrls: ['./user-auth.component.css']
 })
-export class UserAuthComponent implements OnInit {
+export class UserAuthComponent {
 
-  private currentUser: firebase.User;
+  auth: Observable<firebase.User>;
 
-  constructor(public afAuth: AngularFireAuth) {
-    afAuth.authState.subscribe((user: firebase.User) => this.currentUser = user);
+  constructor(public userAuthService: UserAuthService) {
+    userAuthService.authUser().subscribe((fireuser: firebase.User) => {
+      console.log("UserAuthComponent:", fireuser);
+      this.auth = fireuser;
+    });
   }
 
   login() {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    this.afAuth.auth.signInWithPopup(provider).then(credential => {
-      // manage credentials
-      console.log(credential);
-    }).catch(error => {
-      console.log(error.message);
-    });
-  }
-  logout() {
-    this.afAuth.auth.signOut();
+    this.userAuthService.login();
   }
 
-  ngOnInit() {
+  logout() {
+    this.userAuthService.logout();
   }
+
+
 
 }

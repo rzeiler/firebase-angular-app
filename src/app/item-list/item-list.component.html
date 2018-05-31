@@ -1,13 +1,8 @@
-<h1>Firebase widgets!</h1>
-
-<ng-template #loading>Loading&hellip;</ng-template>
-
-
 <ul>
   <li *ngFor="let item of items | async">
-   {{item.key}}
+    <input type="text" #updatesize [value]="item.size" />
     <input type="text" #updatetext [value]="item.text" />
-    <button (click)="updateItem(item.key, updatetext.value)">Update</button>
-    <button (click)="deleteItem(item.key)">Delete</button>
+    <button (click)="updateListItem(item.key, updatetext.value,updatesize.value)">Update</button>
+    <button (click)="deleteListItem(item.key)">Delete</button>
   </li>
 </ul>
