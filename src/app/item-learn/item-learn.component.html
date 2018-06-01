@@ -1,6 +1,6 @@
 <ul>
   <li *ngFor="let item of items | async">
-    <a (click)="validateItem(item.text,item.key)">{{item.text}}</a>
+    <a [ngClass]="{'Red': item.isRight}" (click)="validateItem(item)">{{item.text}}</a>
   </li>
 </ul>
 

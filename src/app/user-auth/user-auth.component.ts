@@ -12,8 +12,10 @@ export class UserAuthComponent {
   auth: AuthInfo;
 
   constructor(public userAuthService: UserAuthService) {
-    userAuthService.authUser().subscribe((fireuser: AuthInfo) => {
-      this.auth = fireuser;
+    userAuthService.authUser().subscribe((user: AuthInfo) => {
+      if (user.uid != null) {
+        this.auth = user;
+      }
     });
   }
 

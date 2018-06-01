@@ -12,13 +12,16 @@ import { AuthInfo } from "./auth-info";
 })
 export class UserAuthService {
 
-  static UNKNOWN_USER = new AuthInfo(null);
+  static UNKNOWN_USER = new AuthInfo(null, null);
+
   authInfo$: BehaviorSubject<AuthInfo> = new BehaviorSubject<AuthInfo>(UserAuthService.UNKNOWN_USER);
 
   constructor(public angularFireAuth: AngularFireAuth) {
     this.angularFireAuth.authState
       .subscribe((user: firebase.User) => {
-        this.authInfo$.next(new AuthInfo(user.uid));
+        if (user != null) {
+          this.authInfo$.next(new AuthInfo(user.uid, user.displayName));
+        }
       });
   }
 
@@ -29,7 +32,7 @@ export class UserAuthService {
   login() {
     var provider = new firebase.auth.GoogleAuthProvider();
     this.angularFireAuth.auth.signInWithPopup(provider).then(credential => {
-      this.authInfo$.next(new AuthInfo(credential.uid));
+      this.authInfo$.next(new AuthInfo(credential.uid, credential.displayName));
     });
   }
 

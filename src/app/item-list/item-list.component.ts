@@ -18,11 +18,9 @@ export class ItemListComponent implements OnInit {
   itemsRef: AngularFireList<any>;
   items: Observable<any[]>;
 
-
-
   constructor(public db: AngularFireDatabase, public userAuthService: UserAuthService) {
     userAuthService.authUser().subscribe((user: AuthInfo) => {
-      if (user) {
+      if (user.uid != null) {
         this.itemsRef = db.list(user.uid + '/items');
         this.items = this.itemsRef.snapshotChanges().pipe(
           map(changes =>

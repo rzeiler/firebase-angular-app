@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { UserAuthService } from './user-auth.service';
+import { AuthInfo } from "./auth-info";
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,7 +10,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'learn db';
+  name = '';
 
-  constructor() { }
+  constructor(public auth: UserAuthService) {
+    auth.authUser().subscribe((user: AuthInfo) => {
+      if (user != null) {
+        this.name = user.name;
+      }
+    });
+  }
 
 }
