@@ -12,6 +12,9 @@ import { ItemDetailComponent } from './item-detail/item-detail.component';
 import { UserAuthComponent } from './user-auth/user-auth.component';
 import { AppRoutingModule } from './/app-routing.module';
 import { ItemLearnComponent } from './item-learn/item-learn.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MyDashboardComponent } from './my-dashboard/my-dashboard.component';
+import { MatGridListModule, MatCardModule, MatMenuModule, MatIconModule, MatButtonModule } from '@angular/material';
 
 const routes: Routes = [
   { path: 'all', component: ItemListComponent },
@@ -27,7 +30,8 @@ const routes: Routes = [
     ItemListComponent,
     ItemDetailComponent,
     UserAuthComponent,
-    ItemLearnComponent
+    ItemLearnComponent,
+    MyDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +40,13 @@ const routes: Routes = [
     AngularFireAuthModule,
     FormsModule,
     AppRoutingModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    BrowserAnimationsModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
